@@ -3,6 +3,7 @@ import time
 admin_password = 12345 #Для админов можно потом сделать как-нить отдельно создание пароля :) (через int(input()) само собой:) )
 user_names = ['anastas', 'timon', 'chimin', 'bts']
 name = None
+attempt = 2
 
 spisok = len(user_names)
 while name != '':   
@@ -11,31 +12,21 @@ while name != '':
     if name == 'admin':
         print('Enter your password...')
         password = int(input())
-        if password != admin_password:
-            print('Wrong, try again!')
-            password = int(input())
+        while attempt != 0:
             if password != admin_password:
                 print('Wrong, try again!')
+                attempt -= 1
                 password = int(input())
-                if password != admin_password:
-                    print('Wrong, try again!')
-                    print('Stop!!! You can try again only in')
-                    for i in range(5,0,-1):
-                        print(i)
-                        time.sleep(1)
-                    break
-                else:
-                    print('welcome. Here is your list.')
-                    print(user_names)
-                    break
             else:
                 print('welcome. Here is your list.')
                 print(user_names)
                 break
         else:
-            print('welcome. Here is your list.')
-            print(user_names)
-            break
+            print('Stop!!! You can try again only in')
+            for i in range(5,0,-1):
+                print(i)
+                time.sleep(1)
+                attempt = 2
     else:
         count = 0
         for i in range(0,spisok):
