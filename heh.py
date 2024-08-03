@@ -5,7 +5,7 @@ user_names = ['anastas', 'timon', 'chimin', 'bts']
 name = None
 attempt = 2
 
-spisok = len(user_names)
+number_of_elements = len(user_names)
 while name != '':   
     print('Hi!!! Enter your name.', "If you`re an administrator, write here 'admin'.", end='\n')
     name = input()
@@ -29,7 +29,7 @@ while name != '':
                 attempt = 2
     else:
         count = 0
-        for i in range(0,spisok):
+        for i in range(0,number_of_elements):
             if name == user_names[count]:
                 print('Would you like to delete yourself? Enter "Yes" or "No".')
                 say = input()
