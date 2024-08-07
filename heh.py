@@ -22,27 +22,23 @@ def process_admin(name,attempt,timeout_sec):
             print(i)
             time.sleep(1)
 
-def process_user():
-    for i in range(0,number_of_elements):
-        if name == user_names[i]:
-            print('Would you like to delete yourself? Enter "Yes" or "No".')
-            say = input()
-            if say == 'Yes':
-                user_names.remove(name)
-                print('Done.')
-                break
-            else:
-                print('OK')
-                break
+def process_user(name):
+    if name in user_names:
+        print('Would you like to delete yourself? Enter "Yes" or "No".')
+        say = input()
+        if say == 'Yes':
+            user_names.remove(name)
+            print('Done.')
         else:
-            user_names.append(name)
+            print('OK')
+    else:
+        user_names.append(name)
 
-number_of_elements = len(user_names)
 while name != '':   
     print('Hi!!! Enter your name. \nIf you`re an administrator, write here something from the following list... (your own login)', list(admin_credentials.keys()))
     name = input()
     if name in admin_credentials:
         process_admin(name = name,attempt=3,timeout_sec=5)
     else:
-        process_user()
+        process_user(name)
                     

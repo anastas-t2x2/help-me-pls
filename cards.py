@@ -3,7 +3,7 @@ import random
 print('Hello! Welcome. \nEnter "play" to start the game. \nIf you need help, enter "help".\n')
 key = input().lower()
 
-def play_player():
+def play_player(player_cards):
     while True:
         print("Choose a card.")
         card = input().lower()
@@ -82,7 +82,7 @@ if key == 'play':
             bot_count += 1
             
     if bot_count == 0:
-        play_player()            
+        play_player(player_cards)            
     elif player_count == 0:
         play_bot_first()              
     else:
@@ -171,7 +171,7 @@ if key == 'play':
         cards_num = ['6', '7', '8', '9', 'A', 'B', 'D', 'K', 'T']
         for index in range(len(cards_num)):
             if player_trump_card == cards_num[index]:
-                play_player()
+                play_player(player_cards)
                 break
             elif bot_trum_card == cards_num[index]:
                 play_bot_first()
