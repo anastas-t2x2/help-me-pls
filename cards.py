@@ -1,12 +1,12 @@
 import random
 
 print('Hello! Welcome. \nEnter "play" to start the game. \nIf you need help, enter "help".\n')
-key = input()
+key = input().lower()
 
 def play_player():
     while True:
         print("Choose a card.")
-        card = input()
+        card = input().lower()
         count = 0
         for x in range(6):
             if card == player_cards[x]:

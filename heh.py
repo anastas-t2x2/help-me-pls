@@ -1,17 +1,14 @@
 import time
-
-admin_password = 12345 #Для админов можно потом сделать как-нить отдельно создание пароля :) (через int(input()) само собой:) )
 user_names = ['anastas', 'timon', 'chimin', 'bts']
 name = None
-admin_credentails = {'admin' : 12345,
+admin_credentials = {'admin' : 12345,
                      'alex' : 54321, 
                      'timati' : 00000} #и не взломать
 
-def process_admin():
-    attempt = (int(input('First of all...'))) - 1
+def process_admin(name,attempt):
     password = int(input('Write your password...'))
     while attempt != 0:
-        if password != admin_password:
+        if password != admin_credentials[name]:
             print('Wrong, try again!')
             attempt -= 1
             password = int(input())
@@ -42,10 +39,11 @@ def process_user():
 
 number_of_elements = len(user_names)
 while name != '':   
-    print('Hi!!! Enter your name.', "If you`re an administrator, write here 'admin'.")
+    keys = str(admin_credentials.keys())
+    print('Hi!!! Enter your name. \nIf you`re an administrator, write here something from the following list... (your own login)', keys[10:-1])
     name = input()
-    #if name == admin_credentails[name]:
-        #process_admin()
-    #else:
-        #process_user()
+    if name in admin_credentials:
+        process_admin(name = name,attempt=3)
+    else:
+        process_user()
                     
