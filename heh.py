@@ -3,11 +3,13 @@ import time
 admin_password = 12345 #Для админов можно потом сделать как-нить отдельно создание пароля :) (через int(input()) само собой:) )
 user_names = ['anastas', 'timon', 'chimin', 'bts']
 name = None
+admin_credentails = {'admin' : 12345,
+                     'alex' : 54321, 
+                     'timati' : 00000} #и не взломать
 
-def processAdmin():
-    attempt = 2
-    print('Write your password...')
-    password = int(input())
+def process_admin():
+    attempt = (int(input('First of all...'))) - 1
+    password = int(input('Write your password...'))
     while attempt != 0:
         if password != admin_password:
             print('Wrong, try again!')
@@ -22,9 +24,8 @@ def processAdmin():
         for i in range(5,0,-1):
             print(i)
             time.sleep(1)
-            attempt = 2
 
-def processUser():
+def process_user():
     for i in range(0,number_of_elements):
         if name == user_names[i]:
             print('Would you like to delete yourself? Enter "Yes" or "No".')
@@ -41,10 +42,10 @@ def processUser():
 
 number_of_elements = len(user_names)
 while name != '':   
-    print('Hi!!! Enter your name.', "If you`re an administrator, write here 'admin'.", end='\n')
+    print('Hi!!! Enter your name.', "If you`re an administrator, write here 'admin'.")
     name = input()
-    if name == 'admin':
-        processAdmin()
-    else:
-        processUser()
+    #if name == admin_credentails[name]:
+        #process_admin()
+    #else:
+        #process_user()
                     
