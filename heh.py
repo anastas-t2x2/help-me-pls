@@ -6,12 +6,12 @@ admin_credentials = {'admin' : "12345",
                      'timati' : "00000"} #и не взломать
 
 def process_admin(name,attempt,timeout_sec):
-    password = str(input('Write your password...'))
+    password = input('Write your password...')
     while attempt != 0:
         if password != admin_credentials[name]:
             print('Wrong, try again!')
             attempt -= 1
-            password = str(input())
+            password = input()
         else:
             print('welcome. Here is your list.')
             print(user_names)
