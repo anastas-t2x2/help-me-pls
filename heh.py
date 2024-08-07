@@ -39,8 +39,7 @@ def process_user():
 
 number_of_elements = len(user_names)
 while name != '':   
-    keys = str(admin_credentials.keys())
-    print('Hi!!! Enter your name. \nIf you`re an administrator, write here something from the following list... (your own login)', keys[10:-1])
+    print('Hi!!! Enter your name. \nIf you`re an administrator, write here something from the following list... (your own login)', list(admin_credentials.keys()))
     name = input()
     if name in admin_credentials:
         process_admin(name = name,attempt=3)
