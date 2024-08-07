@@ -5,7 +5,7 @@ admin_credentials = {'admin' : "12345",
                      'alex' : "abc", 
                      'timati' : "00000"} #и не взломать
 
-def process_admin(name,attempt):
+def process_admin(name,attempt,timeout_sec):
     password = str(input('Write your password...'))
     while attempt != 0:
         if password != admin_credentials[name]:
@@ -18,8 +18,8 @@ def process_admin(name,attempt):
             break
     else:
         print('Stop!!! You can try again only in')
-        for i in range(5,0,-1):
-            print(i)
+        for timeout_sec in range(5,0,-1):
+            print(timeout_sec)
             time.sleep(1)
 
 def process_user():
