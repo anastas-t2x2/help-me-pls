@@ -1,17 +1,17 @@
 import time
 user_names = ['anastas', 'timon', 'chimin', 'bts']
 name = None
-admin_credentials = {'admin' : 12345,
-                     'alex' : 54321, 
-                     'timati' : 00000} #и не взломать
+admin_credentials = {'admin' : "12345",
+                     'alex' : "abc", 
+                     'timati' : "00000"} #и не взломать
 
 def process_admin(name,attempt):
-    password = int(input('Write your password...'))
+    password = str(input('Write your password...'))
     while attempt != 0:
         if password != admin_credentials[name]:
             print('Wrong, try again!')
             attempt -= 1
-            password = int(input())
+            password = str(input())
         else:
             print('welcome. Here is your list.')
             print(user_names)
