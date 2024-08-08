@@ -3,10 +3,33 @@ import random
 print('Hello! Welcome. \nEnter "play" to start the game. \nIf you need help, enter "help".\n')
 key = input().lower()
 
-def play_player(player_cards):
+def bot_takes_cards(selected_card):
+    bot_cards.append(selected_card)
+    answer = input('The bot is taking the cards now. \nDo you want to add more cards? (enter "yes" or "no")\n').lower()
+    while answer != "no":
+        if answer == 'yes':
+            card_to_add = input('Enter card you want to add\n')
+            count_for_check = 0
+            for i in range(len(player_cards)):
+                if card_to_add == player_cards[i]:
+                    count_for_check += 1
+            if count_for_check == 0:
+                print("Enter only your cards!")
+            else:
+                bot_cards.append(card_to_add)
+                break
+        else:
+            print('Enter only "yes" or "no"!')
+            break
+    else:
+        print('OK')
+        
+
+def play_player(player_cards, bot_cards):
+    print(bot_cards)
     while True:
         print("Choose a card.")
-        card = input().lower()
+        card = input()
         count = 0
         for x in range(6):
             if card == player_cards[x]:
@@ -21,18 +44,89 @@ def play_player(player_cards):
             else:
                 selected_card = card
                 player_cards.remove(card)
-                print(player_cards)
-                print(selected_card)
                 break
         break
     suit_selected_card = selected_card[slice(2,-1)]
     number_selected_card = selected_card[slice(1)]
     count = 0
+    for index in range(len(bot_cards)):
+        suit_bot_card_index = bot_cards[index]
+        number_bot = suit_bot_card_index[slice(1)]
+        suit_bot_card = suit_bot_card_index[slice(2,-1)]
+    number_selected_bot_card = []
+    number_bot_trump_card_list = []
     if suit_selected_card == suit_trump_card:
-        print('sc')
-        #if 
+        for index in range(len(bot_cards)):
+            bot_card = bot_cards[index]
+            suit_bot_card = bot_card[slice(2,-1)]
+            number_bot_card = bot_card[slice(1)]
+            if suit_bot_card == suit_trump_card:
+                number_bot_trump_card = bot_card[slice(1)]
+                number_bot_trump_card_list.append(number_bot_trump_card)
+                count += 1
+            number_selected_bot_card.append(number_bot_card)
+        number_bot_trump_card_list.sort()
+        if count == 0:
+            bot_takes_cards(selected_card)
+        else:
+            count_for_check = 0
+            if number_selected_card == '6':
+                for index in range(len(number_bot_trump_card_list)):
+                    card = number_bot_trump_card_list[index]
+                    if card == '7' or card == '8' or card == '9' or card == 'A' or card == 'B' or card == 'D' or card == 'K' or card == 'T':
+                        count_for_check += 1
+                        break
+            elif number_selected_card == '7':
+                for index in range(len(number_bot_trump_card_list)):
+                    card = number_bot_trump_card_list[index]
+                    if card == '8' or card == '9' or card == 'A' or card == 'B' or card == 'D' or card == 'K' or card == 'T':
+                        count_for_check += 1
+                        break
+            elif number_selected_card == '8':
+                for index in range(len(number_bot_trump_card_list)):
+                    card = number_bot_trump_card_list[index]
+                    if card == '9' or card == 'A' or card == 'B' or card == 'D' or card == 'K' or card == 'T':
+                        count_for_check += 1
+                        break
+            elif number_selected_card == '9':
+                for index in range(len(number_bot_trump_card_list)):
+                    card = number_bot_trump_card_list[index]
+                    if card == 'A' or card == 'B' or card == 'D' or card == 'K' or card == 'T':
+                        count_for_check += 1
+                        break
+            elif number_selected_card == 'A':
+                for index in range(len(number_bot_trump_card_list)):
+                    card = number_bot_trump_card_list[index]
+                    if card == 'B' or card == 'D' or card == 'K' or card == 'T':
+                        count_for_check += 1
+                        break
+            elif number_selected_card == 'B':
+                for index in range(len(number_bot_trump_card_list)):
+                    card = number_bot_trump_card_list[index]
+                    if card == 'D' or card == 'K' or card == 'T':
+                        count_for_check += 1
+                        break
+            elif number_selected_card == 'D':
+                for index in range(len(number_bot_trump_card_list)):
+                    card = number_bot_trump_card_list[index]
+                    if card == 'K' or card == 'T':
+                        count_for_check += 1
+                        break
+            elif number_selected_card == 'K':
+                for index in range(len(number_bot_trump_card_list)):
+                    card = number_bot_trump_card_list[index]
+                    if card == 'T':
+                        count_for_check += 1
+                        break
+            elif number_selected_card == 'T':
+                bot_takes_cards(selected_card)
+            else:
+                bot_takes_cards(selected_card)
+                        
+                    
+        
     
-def play_bot_first():
+def play_bot_first(bot_cards):
     print('bot')
 
 def help():
@@ -67,6 +161,8 @@ if key == 'play':
     bot_count = 0
     player_numbers = []
     bot_numbers = []
+    number_for_bot = []
+    suit_for_bot = []
     for index in range(6):
         suit_player_card_index = player_cards[index]
         suit_bot_card_index = bot_cards[index]
@@ -82,9 +178,9 @@ if key == 'play':
             bot_count += 1
             
     if bot_count == 0:
-        play_player(player_cards)            
+        play_player(player_cards,bot_cards)            
     elif player_count == 0:
-        play_bot_first()              
+        play_bot_first(bot_cards)              
     else:
         lenght_of_list_player = len(player_numbers)
         lenght_of_list_bot = len(bot_numbers)
@@ -171,10 +267,10 @@ if key == 'play':
         cards_num = ['6', '7', '8', '9', 'A', 'B', 'D', 'K', 'T']
         for index in range(len(cards_num)):
             if player_trump_card == cards_num[index]:
-                play_player(player_cards)
+                play_player(player_cards,bot_cards)
                 break
             elif bot_trum_card == cards_num[index]:
-                play_bot_first()
+                play_bot_first(bot_cards)
                 print('bot start')
                 break
 elif key == 'help':
