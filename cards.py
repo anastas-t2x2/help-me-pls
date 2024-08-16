@@ -1,15 +1,56 @@
 import random 
 import time
 
-print('Hello! Welcome. \nEnter "play" to start the game. \nIf you need help, enter "help".\n')
-command = input().lower()
+class Card:
+        def __init__(self, rank, suit):
+            self.rank = rank
+            self.suit = suit
 
-if command == 'play':
-    prepare_cards()
-elif command == 'help':
-    help()
-else:
-    print('Enter only "play" or "help"!!! >:[')
+cards = [Card('6', ' hearts'),
+        Card('7',' hearts'),
+        Card('8',' hearts'),
+        Card('9',' hearts'),
+        Card('A',' hearts'),
+        Card('B',' hearts'),
+        Card('D',' hearts'),
+        Card('K',' hearts'),
+        Card('T',' hearts'),
+        Card('6',' diamonds'),
+        Card('7',' diamonds'),
+        Card('8',' diamonds'),
+        Card('9',' diamonds'),
+        Card('A',' diamonds'),
+        Card('B',' diamonds'),
+        Card('D',' diamonds'),
+        Card('K',' diamonds'),
+        Card('T',' diamonds'),
+        Card('6',' clubs'),
+        Card('7',' clubs'),
+        Card('8',' clubs'),
+        Card('9',' clubs'),
+        Card('A',' clubs'),
+        Card('B',' clubs'),
+        Card('D',' clubs'),
+        Card('K',' clubs'),
+        Card('T',' clubs'),
+        Card('6',' spades'),
+        Card('7',' spades'),
+        Card('8',' spades'),
+        Card('9',' spades'),
+        Card('A',' spades'),
+        Card('B',' spades'),
+        Card('D',' spades'),
+        Card('K',' spades'),
+        Card('T',' spades')]
+def main():
+    print('Hello! Welcome. \nEnter "play" to start the game. \nIf you need help, enter "help".\n')
+    command = input().lower()
+    if command == 'play':
+        prepare_cards()
+    elif command == 'help':
+        help()
+    else:
+        print('Enter only "play" or "help"!!! >:[')
 
 def who_goes_first(trump_card,player_cards,bot_cards, cards):
     suit_trump_card = trump_card[slice(2,-1)]
@@ -130,46 +171,6 @@ def who_goes_first(trump_card,player_cards,bot_cards, cards):
                 break
             
 def prepare_cards(): #подготовка колоды
-    class Card:
-        def __init__(self, rank, suit):
-            self.rank = rank
-            self.suit = suit
-    cards = [Card('6', ' hearts'),
-             Card('7',' hearts'),
-             Card('8',' hearts'),
-             Card('9',' hearts'),
-             Card('A',' hearts'),
-             Card('B',' hearts'),
-             Card('D',' hearts'),
-             Card('K',' hearts'),
-             Card('T',' hearts'),
-             Card('6',' diamonds'),
-             Card('7',' diamonds'),
-             Card('8',' diamonds'),
-             Card('9',' diamonds'),
-             Card('A',' diamonds'),
-             Card('B',' diamonds'),
-             Card('D',' diamonds'),
-             Card('K',' diamonds'),
-             Card('T',' diamonds'),
-             Card('6',' clubs'),
-             Card('7',' clubs'),
-             Card('8',' clubs'),
-             Card('9',' clubs'),
-             Card('A',' clubs'),
-             Card('B',' clubs'),
-             Card('D',' clubs'),
-             Card('K',' clubs'),
-             Card('T',' clubs'),
-             Card('6',' spades'),
-             Card('7',' spades'),
-             Card('8',' spades'),
-             Card('9',' spades'),
-             Card('A',' spades'),
-             Card('B',' spades'),
-             Card('D',' spades'),
-             Card('K',' spades'),
-             Card('T',' spades')]
     player_cards = []
     bot_cards = []
     print('\nLet`s gooo\n') #D - дама; B - валет ;) "A "= 10
@@ -506,3 +507,4 @@ def play_bot_first(bot_cards):
 def help(): #мейби я потом доработаю правила, но сейчас мне лень переводить всё:)
     print('\nHere are the rules of the game.\n')
     print('The game uses a deck of 36 cards. \nPlayers are dealt 6 cards each, after which a trump card is announced. \nThe player with the lowest trump card goes first. \nThe one "under whom" they go must beat the card. \nThe rest of the participants can throw up cards, the player must beat them all. \nIf he breaks through, then he has the next move, if not, then he takes all the unbroken cards for himself and skips the turn. \nPlayers should always have 6 cards in their hands, they take the missing ones from the deck. \nWhen the deck ends, the players play with the remaining cards in their hands, gradually getting rid of all of them. \nWhoever is left with the cards is a fool.')
+main()
