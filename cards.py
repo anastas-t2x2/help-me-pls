@@ -2,55 +2,47 @@ import random
 import time
 
 class Card:
-        def __init__(self, rank, suit):
-            self.rank = rank
-            self.suit = suit
+    def __init__(self, rank, suit):
+        self.rank = rank
+        self.suit = suit
 
-cards = [Card('6', ' hearts'),
-        Card('7',' hearts'),
-        Card('8',' hearts'),
-        Card('9',' hearts'),
-        Card('A',' hearts'),
-        Card('B',' hearts'),
-        Card('D',' hearts'),
-        Card('K',' hearts'),
-        Card('T',' hearts'),
-        Card('6',' diamonds'),
-        Card('7',' diamonds'),
-        Card('8',' diamonds'),
-        Card('9',' diamonds'),
-        Card('A',' diamonds'),
-        Card('B',' diamonds'),
-        Card('D',' diamonds'),
-        Card('K',' diamonds'),
-        Card('T',' diamonds'),
-        Card('6',' clubs'),
-        Card('7',' clubs'),
-        Card('8',' clubs'),
-        Card('9',' clubs'),
-        Card('A',' clubs'),
-        Card('B',' clubs'),
-        Card('D',' clubs'),
-        Card('K',' clubs'),
-        Card('T',' clubs'),
-        Card('6',' spades'),
-        Card('7',' spades'),
-        Card('8',' spades'),
-        Card('9',' spades'),
-        Card('A',' spades'),
-        Card('B',' spades'),
-        Card('D',' spades'),
-        Card('K',' spades'),
-        Card('T',' spades')]
 def main():
     print('Hello! Welcome. \nEnter "play" to start the game. \nIf you need help, enter "help".\n')
     command = input().lower()
     if command == 'play':
         prepare_cards()
+        player_cards = []
+        bot_cards = []
+        print('10 is A, Jack is B, Queen is D\n') #для пользователя, а то так хрен поймёшь :)
+        print('Now you have:\n')
+        while len(player_cards) != 6:
+            card_to_add = cards[0].rank+cards[0].suit
+            player_cards.append(card_to_add)
+            cards.remove(cards[0])
+        for i in range(len(player_cards)):
+            print(player_cards[i])
+        while len(bot_cards) != 6:
+            card_to_add = cards[0].rank+cards[0].suit
+            bot_cards.append(card_to_add)
+            cards.remove(cards[0])
+        print('\nThe trump card is...\n') #выводит козыря на экран
+        trump_card = cards[-1].rank+cards[-1].suit
+        print(trump_card)
+        print()
+        who_goes_first()
     elif command == 'help':
         help()
     else:
         print('Enter only "play" or "help"!!! >:[')
+
+def prepare_cards(cards): #подготовка колоды
+    ranks = ['6','7','8','9','A','B','D','K','T']
+    suits = [' hearts', ' diamonds', ' clubs', ' spades']
+    cards = [Card(rank,suit) for suit in suits for rank in ranks]
+    print(cards)
+    print('\nLet`s gooo\n') #D - дама; B - валет ;) "A "= 10
+    random.shuffle(cards)
+    return cards
 
 def who_goes_first(trump_card,player_cards,bot_cards, cards):
     suit_trump_card = trump_card[slice(2,-1)]
@@ -169,29 +161,6 @@ def who_goes_first(trump_card,player_cards,bot_cards, cards):
                 play_bot_first(bot_cards) #первый бот в силу меньшего козыря
                 print('bot start')
                 break
-            
-def prepare_cards(): #подготовка колоды
-    player_cards = []
-    bot_cards = []
-    print('\nLet`s gooo\n') #D - дама; B - валет ;) "A "= 10
-    random.shuffle(cards)
-    print('10 is A, Jack is B, Queen is D\n') #для пользователя, а то так хрен поймёшь :)
-    print('Now you have:\n')
-    while len(player_cards) != 6:
-        card_to_add = cards[0].rank+cards[0].suit
-        player_cards.append(card_to_add)
-        cards.remove(cards[0])
-    for i in range(len(player_cards)):
-        print(player_cards[i])
-    while len(bot_cards) != 6:
-        card_to_add = cards[0].rank+cards[0].suit
-        bot_cards.append(card_to_add)
-        cards.remove(cards[0])
-    print('\nThe trump card is...\n') #выводит козыря на экран
-    trump_card = cards[-1].rank+cards[-1].suit
-    print(trump_card)
-    print()
-    who_goes_first(trump_card,player_cards,bot_cards, cards)
 
 def take_cards(bot_cards,player_cards,cards):
     if len(bot_cards) < 6:
