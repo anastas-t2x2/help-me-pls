@@ -10,39 +10,45 @@ def main():
     print('Hello! Welcome. \nEnter "play" to start the game. \nIf you need help, enter "help".\n')
     command = input().lower()
     if command == 'play':
-        prepare_cards()
-        player_cards = []
-        bot_cards = []
-        print('10 is A, Jack is B, Queen is D\n') #для пользователя, а то так хрен поймёшь :)
-        print('Now you have:\n')
-        while len(player_cards) != 6:
-            card_to_add = cards[0].rank+cards[0].suit
-            player_cards.append(card_to_add)
-            cards.remove(cards[0])
-        for i in range(len(player_cards)):
-            print(player_cards[i])
-        while len(bot_cards) != 6:
-            card_to_add = cards[0].rank+cards[0].suit
-            bot_cards.append(card_to_add)
-            cards.remove(cards[0])
-        print('\nThe trump card is...\n') #выводит козыря на экран
-        trump_card = cards[-1].rank+cards[-1].suit
-        print(trump_card)
-        print()
-        who_goes_first()
+        play_card_game()
     elif command == 'help':
         help()
     else:
         print('Enter only "play" or "help"!!! >:[')
-
-def prepare_cards(cards): #подготовка колоды
-    ranks = ['6','7','8','9','A','B','D','K','T']
-    suits = [' hearts', ' diamonds', ' clubs', ' spades']
+        
+def prepare_cards(): #подготовка колоды
+    ranks = ['6','7','8','9','10','J','Q','K','A']
+    suits = ['hearts', 'diamonds', 'clubs', 'spades']
     cards = [Card(rank,suit) for suit in suits for rank in ranks]
-    print(cards)
-    print('\nLet`s gooo\n') #D - дама; B - валет ;) "A "= 10
+    print('\nLet`s gooo\n') 
     random.shuffle(cards)
     return cards
+
+def play_card_game():
+    cards = prepare_cards()
+    player_cards = []
+    bot_cards = []
+    get_cards_into_hand(player_cards, bot_cards)
+    print('\nThe trump card is...\n') #выводит козыря на экран
+    trump_card = cards[-1].rank+' '+cards[-1].suit
+    print(trump_card)
+    print()
+    for i in range(len(bot_cards)):
+        print(bot_cards[i])
+    who_goes_first(trump_card,player_cards,bot_cards, cards)
+
+def get_cards_into_hand(player_cards, bot_cards):
+    cards = prepare_cards()
+    cards_limit = 6
+    print('Now you have:\n')
+    while len(player_cards) < cards_limit:
+        card = cards.pop(-1)
+        player_cards.append(card.rank+' '+card.suit)
+    for i in range(len(player_cards)):
+        print(player_cards[i])
+    while len(bot_cards) < cards_limit:
+        card = cards.pop(-1)
+        bot_cards.append(card.rank+' '+card.suit)
 
 def who_goes_first(trump_card,player_cards,bot_cards, cards):
     suit_trump_card = trump_card[slice(2,-1)]
@@ -110,8 +116,6 @@ def who_goes_first(trump_card,player_cards,bot_cards, cards):
                                             if player_numbers[lenght_player] == 'T':
                                                 player_trump_card = player_numbers[lenght_player]
                                                 break
-                                            else:
-                                                print('pN')
         bot_trum_card = None
         bot_numbers.sort()
         for lenght_bot in range(lenght_of_list_bot):
@@ -161,6 +165,9 @@ def who_goes_first(trump_card,player_cards,bot_cards, cards):
                 play_bot_first(bot_cards) #первый бот в силу меньшего козыря
                 print('bot start')
                 break
+
+#def sort():
+   # 
 
 def take_cards(bot_cards,player_cards,cards):
     if len(bot_cards) < 6:
