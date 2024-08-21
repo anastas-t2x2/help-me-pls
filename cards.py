@@ -26,8 +26,6 @@ def prepare_cards(): #подготовка колоды
 
 def play_card_game():
     cards = prepare_cards()
-    player_cards = []
-    bot_cards = []
     print('Now you have:\n')
     player_cards = get_cards_into_hand(cards = cards, player_cards = [], cards_limit = 6)
     bot_cards = get_cards_into_hand(cards = cards, player_cards = [], cards_limit = 6)
@@ -36,20 +34,20 @@ def play_card_game():
     print('\nThe trump card is...\n') #выводит козыря на экран
     trump_card = cards[-1].rank+' '+cards[-1].suit
     print(trump_card)
+    trump_card = cards[-1]
     print()
     for i in range(len(bot_cards)):
-        print(bot_cards[i])
+        print(bot_cards[i].rank+' '+bot_cards[i].suit)
     who_goes_first(trump_card,player_cards,bot_cards, cards)
 
 def get_cards_into_hand(cards, player_cards, cards_limit):
-    cards_limit = 6
     while len(player_cards) < cards_limit:
         card = cards.pop(-1)
         player_cards.append(card)
     return player_cards
 
 def who_goes_first(trump_card,player_cards,bot_cards, cards):
-    suit_trump_card = trump_card[slice(2,-1)]
+    suit_trump_card = trump_card.suit
     suit_player_card = None
     suit_bot_card = None
     player_count = 0
@@ -57,12 +55,12 @@ def who_goes_first(trump_card,player_cards,bot_cards, cards):
     player_numbers = []
     bot_numbers = []
     for index in range(6): #смотрим кто первый ходит
-        suit_player_card_index = player_cards[index]
-        suit_bot_card_index = bot_cards[index]
-        number_player = suit_player_card_index[slice(1)]
-        number_bot = suit_bot_card_index[slice(1)]
-        suit_player_card = suit_player_card_index[slice(2,-1)]
-        suit_bot_card = suit_bot_card_index[slice(2,-1)]
+        player_card_index = player_cards[index]
+        bot_card_index = bot_cards[index]
+        number_player = player_card_index.rank
+        number_bot = bot_card_index.rank
+        suit_player_card = player_card_index.suit
+        suit_bot_card = bot_card_index.suit
         if suit_player_card == suit_trump_card:
             player_numbers.append(number_player)
             player_count += 1 
@@ -76,6 +74,7 @@ def who_goes_first(trump_card,player_cards,bot_cards, cards):
     else:
         lenght_of_list_player = len(player_numbers)
         lenght_of_list_bot = len(bot_numbers)
+        #sort(player_numbers, bot_numbers)
         player_numbers.sort()
         player_trump_card = None
         for lenght_player in range(lenght_of_list_player):
@@ -95,15 +94,15 @@ def who_goes_first(trump_card,player_cards,bot_cards, cards):
                             player_trump_card = player_numbers[lenght_player]
                             break
                         else:
-                            if player_numbers[lenght_player] == 'A':
+                            if player_numbers[lenght_player] == '10':
                                 player_trump_card = player_numbers[lenght_player]
                                 break
                             else:
-                                if player_numbers[lenght_player] == 'B':
+                                if player_numbers[lenght_player] == 'J':
                                     player_trump_card = player_numbers[lenght_player]
                                     break
                                 else:
-                                    if player_numbers[lenght_player] == 'D':
+                                    if player_numbers[lenght_player] == 'Q':
                                         player_trump_card = player_numbers[lenght_player]
                                         break
                                     else:
@@ -111,7 +110,7 @@ def who_goes_first(trump_card,player_cards,bot_cards, cards):
                                             player_trump_card = player_numbers[lenght_player]
                                             break
                                         else:
-                                            if player_numbers[lenght_player] == 'T':
+                                            if player_numbers[lenght_player] == 'A':
                                                 player_trump_card = player_numbers[lenght_player]
                                                 break
         bot_trum_card = None
@@ -133,15 +132,15 @@ def who_goes_first(trump_card,player_cards,bot_cards, cards):
                             bot_trum_card = bot_numbers[lenght_bot]
                             break
                         else:
-                            if bot_numbers[lenght_bot] == 'A':
+                            if bot_numbers[lenght_bot] == '10':
                                 bot_trum_card = bot_numbers[lenght_bot]
                                 break
                             else:
-                                if bot_numbers[lenght_bot] == 'B':
+                                if bot_numbers[lenght_bot] == 'J':
                                     bot_trum_card = bot_numbers[lenght_bot]
                                     break
                                 else:
-                                    if bot_numbers[lenght_bot] == 'D':
+                                    if bot_numbers[lenght_bot] == 'Q':
                                         bot_trum_card = bot_numbers[lenght_bot]
                                         break
                                     else:
@@ -149,12 +148,12 @@ def who_goes_first(trump_card,player_cards,bot_cards, cards):
                                             bot_trum_card = bot_numbers[lenght_bot]
                                             break
                                         else:
-                                            if bot_numbers[lenght_bot] == 'T':
+                                            if bot_numbers[lenght_bot] == 'A':
                                                 bot_trum_card = bot_numbers[lenght_bot]
                                                 break
                                             else:
                                                 print('bN')
-        cards_num = ['6', '7', '8', '9', 'A', 'B', 'D', 'K', 'T']
+        cards_num = ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
         for index in range(len(cards_num)):
             if player_trump_card == cards_num[index]:
                 play_player_first(player_cards,bot_cards, suit_trump_card, cards) #первый игрок в силу меньшего козыря
@@ -164,8 +163,8 @@ def who_goes_first(trump_card,player_cards,bot_cards, cards):
                 print('bot start')
                 break
 
-#def sort():
-   # 
+#def sort(player_numbers, bot_numbers):
+    #if player_numbers == 
 
 def take_cards(bot_cards,player_cards,cards):
     if len(bot_cards) < 6:
