@@ -28,7 +28,11 @@ def play_card_game():
     cards = prepare_cards()
     player_cards = []
     bot_cards = []
-    get_cards_into_hand(player_cards, bot_cards)
+    print('Now you have:\n')
+    player_cards = get_cards_into_hand(cards = cards, player_cards = [], cards_limit = 6)
+    bot_cards = get_cards_into_hand(cards = cards, player_cards = [], cards_limit = 6)
+    for i in range(len(player_cards)):
+        print(player_cards[i].rank+' '+player_cards[i].suit)
     print('\nThe trump card is...\n') #выводит козыря на экран
     trump_card = cards[-1].rank+' '+cards[-1].suit
     print(trump_card)
@@ -37,18 +41,12 @@ def play_card_game():
         print(bot_cards[i])
     who_goes_first(trump_card,player_cards,bot_cards, cards)
 
-def get_cards_into_hand(player_cards, bot_cards):
-    cards = prepare_cards()
+def get_cards_into_hand(cards, player_cards, cards_limit):
     cards_limit = 6
-    print('Now you have:\n')
     while len(player_cards) < cards_limit:
         card = cards.pop(-1)
-        player_cards.append(card.rank+' '+card.suit)
-    for i in range(len(player_cards)):
-        print(player_cards[i])
-    while len(bot_cards) < cards_limit:
-        card = cards.pop(-1)
-        bot_cards.append(card.rank+' '+card.suit)
+        player_cards.append(card)
+    return player_cards
 
 def who_goes_first(trump_card,player_cards,bot_cards, cards):
     suit_trump_card = trump_card[slice(2,-1)]
