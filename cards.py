@@ -9,8 +9,8 @@ class Card:
         return f'{self.rank} {self.suit}'
     
 def show_cards(player_cards):
-    for i in range(len(player_cards)):
-        print(player_cards[i].rank+' '+player_cards[i].suit)
+    for card in player_cards:
+        print(card)
 
 def main():
     print('Hello! Welcome. \nEnter "play" to start the game. \nIf you need help, enter "help".\n')
