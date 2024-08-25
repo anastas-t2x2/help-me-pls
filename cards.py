@@ -36,12 +36,16 @@ def play_card_game():
     player_cards = get_cards_into_hand(cards = cards, player_cards = [], cards_limit = 6)
     bot_cards = get_cards_into_hand(cards = cards, player_cards = [], cards_limit = 6)
     show_cards(player_cards)
+    trump_card = trump_card_is(cards)
+    who_goes_first(trump_card,player_cards,bot_cards, cards)
+
+def trump_card_is(cards):
     print('\nThe trump card is...\n') #выводит козыря на экран
     trump_card = cards[-1].rank+' '+cards[-1].suit
     print(trump_card)
     trump_card = cards[-1]
     print()
-    who_goes_first(trump_card,player_cards,bot_cards, cards)
+    return trump_card
 
 def get_cards_into_hand(cards, player_cards, cards_limit):
     while len(player_cards) < cards_limit:
@@ -255,8 +259,8 @@ def play_bot(player_cards, bot_cards, suit_trump_card,cards, selected_cards):
         if suit_selected_card == suit_trump_card: #если масть карты игрока совпадает с мастью козыря
             for index in range(len(bot_cards)):
                 bot_card = bot_cards[index]
-                suit_bot_card = bot_card[slice(2,-1)]
-                number_bot_card = bot_card[slice(1)]
+                suit_bot_card = bot_card.suit
+                number_bot_card = bot_card.rank
                 if suit_bot_card == suit_trump_card:
                     number_bot_trump_card = bot_card[slice(1)]
                     number_bot_trump_card_list.append(number_bot_trump_card)
@@ -325,7 +329,7 @@ def play_bot(player_cards, bot_cards, suit_trump_card,cards, selected_cards):
                 if count_for_check == 0:
                     bot_takes_cards(selected_cards,bot_cards, player_cards,number_selected_card)
                 else: 
-                    selected_bot_card = card + ' ' + suit_trump_card + 's'
+                    selected_bot_card = card + ' ' + suit_trump_card
                     print('\nThe bot`s card is...\n')
                     time.sleep(1)
                     print(selected_bot_card)
@@ -389,7 +393,7 @@ def play_bot(player_cards, bot_cards, suit_trump_card,cards, selected_cards):
                         bot_trump_num = bot_trump_card.rank
                         bot_trump_numbers.append(bot_trump_num)
                     bot_trump_numbers.sort()
-                    selected_bot_card = bot_trump_card[0]+' '+suit_trump_card+'s'
+                    selected_bot_card = bot_trump_num[0]+' '+suit_trump_card
                     print('\nThe bot`s card is...\n')
                     time.sleep(1)
                     print(selected_bot_card)
