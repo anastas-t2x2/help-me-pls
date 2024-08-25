@@ -5,6 +5,7 @@ class Card:
     def __init__(self, rank, suit):
         self.rank = rank
         self.suit = suit
+        
     def __str__(self):
         return f'{self.rank} {self.suit}'
     
@@ -32,18 +33,17 @@ def prepare_cards(): #подготовка колоды
 
 def play_card_game():
     cards = prepare_cards()
-    print('Now you have:\n')
     player_cards = get_cards_into_hand(cards = cards, player_cards = [], cards_limit = 6)
     bot_cards = get_cards_into_hand(cards = cards, player_cards = [], cards_limit = 6)
+    print('Now you have:\n')
     show_cards(player_cards)
     trump_card = trump_card_is(cards)
     who_goes_first(trump_card,player_cards,bot_cards, cards)
 
 def trump_card_is(cards):
     print('\nThe trump card is...\n') #выводит козыря на экран
-    trump_card = cards[-1].rank+' '+cards[-1].suit
-    print(trump_card)
     trump_card = cards[-1]
+    print(trump_card)
     print()
     return trump_card
 
@@ -52,6 +52,10 @@ def get_cards_into_hand(cards, player_cards, cards_limit):
         card = cards.pop(-1)
         player_cards.append(card)
     return player_cards
+
+def minimum_trump(player_cards, turmp_card):
+    for i in range(len(player_cards)):
+        trum
 
 def who_goes_first(trump_card,player_cards,bot_cards, cards):
     suit_trump_card = trump_card.suit
