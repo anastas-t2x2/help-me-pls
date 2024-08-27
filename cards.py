@@ -11,10 +11,6 @@ class Card:
     def __str__(self):
         return f'{self.rank} {self.suit}'
     
-def show_cards(player_cards):
-    for card in player_cards:
-        print(card)
-
 def main():
     print('Hello! Welcome. \nEnter "play" to start the game. \nIf you need help, enter "help".\n')
     command = input().lower()
@@ -24,7 +20,19 @@ def main():
         help()
     else:
         print('Enter only "play" or "help"!!! >:[')
-        
+
+def play_card_game():
+    cards = prepare_cards()
+    player_cards = get_cards_into_hand(cards = cards, player_cards = [], cards_limit = 6)
+    bot_cards = get_cards_into_hand(cards = cards, player_cards = [], cards_limit = 6)
+    print('Now you have:\n')
+    show_cards(player_cards)
+    trump_card = define_trump_card(cards)
+    player_minimum_trump = minimum_trump(player_cards, trump_card)
+    bot_minimum_trump = minimum_trump(bot_cards, trump_card)
+    show_cards(player_cards=bot_cards)
+    who_goes_first(trump_card,player_cards,bot_cards, cards)
+
 def prepare_cards(): #подготовка колоды
     suits = ['hearts', 'diamonds', 'clubs', 'spades']
     cards = [Card(rank,suit) for suit in suits for rank in RANKS]
@@ -32,39 +40,29 @@ def prepare_cards(): #подготовка колоды
     random.shuffle(cards)
     return cards
 
-def play_card_game():
-    my_list = []
-    cards = prepare_cards()
-    player_cards = get_cards_into_hand(cards = cards, player_cards = [], cards_limit = 6)
-    bot_cards = get_cards_into_hand(cards = cards, player_cards = [], cards_limit = 6)
-    print('Now you have:\n')
-    show_cards(player_cards)
-    trump_card = trump_card_is(cards)
-    minimum_trump(player_cards, trump_card)
-    minimum_trump(bot_cards, trump_card)
-    my_list.insert(1, trump_card)
-    show_cards(player_cards=bot_cards)
-    who_goes_first(trump_card,player_cards,bot_cards, cards)
-
-def trump_card_is(cards):
-    print('\nThe trump card is...\n') #выводит козыря на экран
-    trump_card = cards.pop(-1)
-    print(trump_card)
-    print()
-    return trump_card
-
 def get_cards_into_hand(cards, player_cards, cards_limit):
     while len(player_cards) < cards_limit:
         card = cards.pop(-1)
         player_cards.append(card)
     return player_cards
 
+def show_cards(player_cards):
+    for card in player_cards:
+        print(card)
+
+def define_trump_card(cards):
+    trump_card = cards.pop(-1)
+    cards.insert(0, trump_card)
+    print(f"\nTrump card is: {trump_card}\n")
+    return trump_card
+
 def minimum_trump(player_cards, trump_card):
     min_trump_card_rank = 10
-    for i in range(len(player_cards)):
-        if player_cards[i].suit == trump_card.suit:
-            current_trump_index = RANKS.index(player_cards[i].rank)
+    for card in player_cards:
+        if card.suit == trump_card.suit:
+            current_trump_index = RANKS.index(card.rank)
             min_trump_card_rank = min(min_trump_card_rank, current_trump_index)
+    return min_trump_card_rank
 
 def who_goes_first(trump_card,player_cards,bot_cards, cards):
     suit_trump_card = trump_card.suit
