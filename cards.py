@@ -1,6 +1,8 @@
 import random 
 import time
 
+RANKS = ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+
 class Card:
     def __init__(self, rank, suit):
         self.rank = rank
@@ -24,25 +26,28 @@ def main():
         print('Enter only "play" or "help"!!! >:[')
         
 def prepare_cards(): #подготовка колоды
-    ranks = ['6','7','8','9','10','J','Q','K','A']
     suits = ['hearts', 'diamonds', 'clubs', 'spades']
-    cards = [Card(rank,suit) for suit in suits for rank in ranks]
+    cards = [Card(rank,suit) for suit in suits for rank in RANKS]
     print('\nLet`s gooo\n') 
     random.shuffle(cards)
     return cards
 
 def play_card_game():
+    my_list = []
     cards = prepare_cards()
     player_cards = get_cards_into_hand(cards = cards, player_cards = [], cards_limit = 6)
     bot_cards = get_cards_into_hand(cards = cards, player_cards = [], cards_limit = 6)
     print('Now you have:\n')
     show_cards(player_cards)
     trump_card = trump_card_is(cards)
+    minimum_trump(player_cards, trump_card)
+    minimum_trump(bot_cards, trump_card)
+    my_list.insert(1, trump_card)
     who_goes_first(trump_card,player_cards,bot_cards, cards)
 
 def trump_card_is(cards):
     print('\nThe trump card is...\n') #выводит козыря на экран
-    trump_card = cards[-1]
+    trump_card = cards.pop(-1)
     print(trump_card)
     print()
     return trump_card
@@ -53,9 +58,13 @@ def get_cards_into_hand(cards, player_cards, cards_limit):
         player_cards.append(card)
     return player_cards
 
-def minimum_trump(player_cards, turmp_card):
+def minimum_trump(player_cards, trump_card):
+    min_trump_card_rank = None
     for i in range(len(player_cards)):
-        trum
+        if player_cards[i].suit == trump_card.suit:
+            current_trump_index = RANKS.index(player_cards[i].rank)
+            min_trump_card_rank = min(min_trump_card_rank, current_trump_index)
+    print(min_trump_card_rank)
 
 def who_goes_first(trump_card,player_cards,bot_cards, cards):
     suit_trump_card = trump_card.suit
