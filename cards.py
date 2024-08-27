@@ -43,6 +43,7 @@ def play_card_game():
     minimum_trump(player_cards, trump_card)
     minimum_trump(bot_cards, trump_card)
     my_list.insert(1, trump_card)
+    show_cards(player_cards=bot_cards)
     who_goes_first(trump_card,player_cards,bot_cards, cards)
 
 def trump_card_is(cards):
@@ -59,12 +60,11 @@ def get_cards_into_hand(cards, player_cards, cards_limit):
     return player_cards
 
 def minimum_trump(player_cards, trump_card):
-    min_trump_card_rank = None
+    min_trump_card_rank = 10
     for i in range(len(player_cards)):
         if player_cards[i].suit == trump_card.suit:
             current_trump_index = RANKS.index(player_cards[i].rank)
             min_trump_card_rank = min(min_trump_card_rank, current_trump_index)
-    print(min_trump_card_rank)
 
 def who_goes_first(trump_card,player_cards,bot_cards, cards):
     suit_trump_card = trump_card.suit
@@ -90,7 +90,14 @@ def who_goes_first(trump_card,player_cards,bot_cards, cards):
     if bot_count == 0:
         play_player_first(player_cards,bot_cards, suit_trump_card, cards)    #первый ходит игрок         
     elif player_count == 0:
-        play_bot_first(bot_cards)              # первый ходит бот
+        play_bot_first(bot_cards)# первый ходит бот
+    elif player_count == 0 and bot_count == 0:
+        num_for_random = [0, 1]
+        random.shuffle(num_for_random)
+        if num_for_random[0] == 0:
+            play_bot_first
+        else:
+            play_player_first
     else:
         lenght_of_list_player = len(player_numbers)
         lenght_of_list_bot = len(bot_numbers)
