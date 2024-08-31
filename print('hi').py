@@ -1,1 +1,3 @@
-print('hi')
+from tkinter import *
+window = Tk()
+window.mainloop()

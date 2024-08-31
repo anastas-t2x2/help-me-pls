@@ -23,31 +23,31 @@ def main():
 
 def play_card_game():
     cards = prepare_cards()
-    player_cards = get_cards_into_hand(cards = cards, player_cards = [], cards_limit = 6)
-    bot_cards = get_cards_into_hand(cards = cards, player_cards = [], cards_limit = 6)
+    player_cards = get_cards_into_hand(cards = cards, hand_cards = [], cards_limit = 6)
+    bot_cards = get_cards_into_hand(cards = cards, hand_cards = [], cards_limit = 6)
     print('Now you have:\n')
     show_cards(player_cards)
     trump_card = define_trump_card(cards)
-    player_minimum_trump = minimum_trump(player_cards, trump_card)
-    bot_minimum_trump = minimum_trump(bot_cards, trump_card)
-    show_cards(player_cards=bot_cards)
+    player_minimum_trump = get_minimum_trump_rank(player_cards, trump_card)
+    bot_minimum_trump = get_minimum_trump_rank(bot_cards, trump_card)
+    show_cards(hand_cards=bot_cards)
     who_goes_first(trump_card,player_cards,bot_cards, cards)
 
-def prepare_cards(): #подготовка колоды
+def prepare_cards():
     suits = ['hearts', 'diamonds', 'clubs', 'spades']
     cards = [Card(rank,suit) for suit in suits for rank in RANKS]
     print('\nLet`s gooo\n') 
     random.shuffle(cards)
     return cards
 
-def get_cards_into_hand(cards, player_cards, cards_limit):
-    while len(player_cards) < cards_limit:
+def get_cards_into_hand(cards, hand_cards, cards_limit):
+    while len(hand_cards) < cards_limit:
         card = cards.pop(-1)
-        player_cards.append(card)
-    return player_cards
+        hand_cards.append(card)
+    return hand_cards
 
-def show_cards(player_cards):
-    for card in player_cards:
+def show_cards(hand_cards):
+    for card in hand_cards:
         print(card)
 
 def define_trump_card(cards):
@@ -56,13 +56,19 @@ def define_trump_card(cards):
     print(f"\nTrump card is: {trump_card}\n")
     return trump_card
 
-def minimum_trump(player_cards, trump_card):
-    min_trump_card_rank = 10
-    for card in player_cards:
+def get_minimum_trump_rank(hand_cards, trump_card):
+    min_trump_card_rank_index = None
+    for card in hand_cards:
         if card.suit == trump_card.suit:
-            current_trump_index = RANKS.index(card.rank)
-            min_trump_card_rank = min(min_trump_card_rank, current_trump_index)
-    return min_trump_card_rank
+            card_rank_index = RANKS.index(card.rank)
+            if not min_trump_card_rank_index:
+                min_trump_card_rank_index = RANKS.index(card.rank)
+            else:
+                min_trump_card_rank_index = min(min_trump_card_rank_index, card_rank_index)
+    if min_trump_card_rank_index:
+        return RANKS[min_trump_card_rank_index]
+    else:
+        return None
 
 def who_goes_first(trump_card,player_cards,bot_cards, cards):
     suit_trump_card = trump_card.suit
@@ -200,11 +206,12 @@ def take_cards(bot_cards,player_cards,cards):
             player_cards.append(card_to_add)
             cards.remove(cards[0])
     
-def bot_takes_cards(selected_cards,bot_cards,player_cards,number_selected_card):
-    bot_cards.append(selected_cards)
+def bot_takes_cards(card_to_check,bot_cards, player_cards,num_selected_card):
+    selected_card = num_selected_card.pop()+' '+card_to_check
+    bot_cards.append(selected_card)
     time.sleep(1)
     print('\nThe bot is taking the cards now.\n')
-    add_cards(player_cards,number_selected_card, bot_cards)
+    add_cards(player_cards,num_selected_card, bot_cards)
 
 def add_cards(player_cards,number_selected_card, bot_cards):
     count = 0
@@ -248,25 +255,25 @@ def play_player_first(player_cards, bot_cards, suit_trump_card,cards):
     while cards != None:
         count = 0
         try:
-            selected_cards = []
+            suit_selected_card = []
+            num_selected_card = []
             while len(player_cards) == 6:
                 for i in range(len(player_cards)):
                     selected_card = player_cards[i].rank+' '+player_cards[i].suit
                     if card == selected_card:
+                        suit_selected_card.append(player_cards[i].suit)
+                        num_selected_card.append(player_cards[i].rank)
                         player_cards.remove(player_cards[i])
-                        selected_cards.append(selected_card)
                         break
                 break
             break
         except ValueError:
             print('Enter only your card!')
-    play_bot(player_cards, bot_cards, suit_trump_card,cards, selected_cards)
+    play_bot(player_cards, bot_cards, suit_trump_card,cards, suit_selected_card,num_selected_card)
     
                         
                     
-def play_bot(player_cards, bot_cards, suit_trump_card,cards, selected_cards):
-        suit_selected_card = selected_cards[slice(2,-1)]
-        number_selected_card = selected_cards[slice(1)]
+def play_bot(player_cards, bot_cards, suit_trump_card,cards, suit_selected_card, num_selected_card):
         count = 0
         suit_bot_card = []
         for index in range(len(bot_cards)):
@@ -275,6 +282,7 @@ def play_bot(player_cards, bot_cards, suit_trump_card,cards, selected_cards):
         number_selected_bot_card = []
         number_bot_trump_card_list = []
         if suit_selected_card == suit_trump_card: #если масть карты игрока совпадает с мастью козыря
+            print('s')
             for index in range(len(bot_cards)):
                 bot_card = bot_cards[index]
                 suit_bot_card = bot_card.suit
@@ -286,66 +294,66 @@ def play_bot(player_cards, bot_cards, suit_trump_card,cards, selected_cards):
                 number_selected_bot_card.append(number_bot_card)
             number_bot_trump_card_list.sort()
             if count == 0:
-                bot_takes_cards(selected_cards,bot_cards,player_cards,number_selected_card)
+                bot_takes_cards(card_to_check,bot_cards,player_cards,num_selected_card)
             else:
                 count_for_check = 0
                 while count_for_check != 1:
-                    if number_selected_card == '6':
+                    if num_selected_card == '6':
                         for index in range(len(number_bot_trump_card_list)):
                             card = number_bot_trump_card_list[index]
                             if card == '7' or card == '8' or card == '9' or card == 'A' or card == 'B' or card == 'D' or card == 'K' or card == 'T':
                                 count_for_check += 1
                                 break
-                    elif number_selected_card == '7':
+                    elif num_selected_card == '7':
                         for index in range(len(number_bot_trump_card_list)):
                             card = number_bot_trump_card_list[index]
                             if card == '8' or card == '9' or card == 'A' or card == 'B' or card == 'D' or card == 'K' or card == 'T':
                                 count_for_check += 1
                                 break
-                    elif number_selected_card == '8':
+                    elif num_selected_card == '8':
                         for index in range(len(number_bot_trump_card_list)):
                             card = number_bot_trump_card_list[index]
                             if card == '9' or card == 'A' or card == 'B' or card == 'D' or card == 'K' or card == 'T':
                                 count_for_check += 1
                                 break
-                    elif number_selected_card == '9':
+                    elif num_selected_card == '9':
                         for index in range(len(number_bot_trump_card_list)):
                             card = number_bot_trump_card_list[index]
                             if card == 'A' or card == 'B' or card == 'D' or card == 'K' or card == 'T':
                                 count_for_check += 1
                                 break
-                    elif number_selected_card == 'A':
+                    elif num_selected_card == 'A':
                         for index in range(len(number_bot_trump_card_list)):
                             card = number_bot_trump_card_list[index]
                             if card == 'B' or card == 'D' or card == 'K' or card == 'T':
                                 count_for_check += 1
                                 break
-                    elif number_selected_card == 'B':
+                    elif num_selected_card == 'B':
                         for index in range(len(number_bot_trump_card_list)):
                             card = number_bot_trump_card_list[index]
                             if card == 'D' or card == 'K' or card == 'T':
                                 count_for_check += 1
                                 break
-                    elif number_selected_card == 'D':
+                    elif num_selected_card == 'D':
                         for index in range(len(number_bot_trump_card_list)):
                             card = number_bot_trump_card_list[index]
                             if card == 'K' or card == 'T':
                                 count_for_check += 1
                                 break
-                    elif number_selected_card == 'K':
+                    elif num_selected_card == 'K':
                         for index in range(len(number_bot_trump_card_list)):
                             card = number_bot_trump_card_list[index]
                             if card == 'T':
                                 count_for_check += 1
                                 break
-                    elif number_selected_card == 'T':
-                        bot_takes_cards(selected_cards,bot_cards, player_cards,number_selected_card)
+                    elif num_selected_card == 'T':
+                        bot_takes_cards(card_to_check,bot_cards, player_cards,num_selected_card)
                         break
                     else:
-                        bot_takes_cards(selected_cards,bot_cards, player_cards,number_selected_card)
+                        bot_takes_cards(card_to_check, bot_cards, player_cards,num_selected_card)
                         break
                 if count_for_check == 0:
-                    bot_takes_cards(selected_cards,bot_cards, player_cards,number_selected_card)
+                    bot_takes_cards(card_to_check,bot_cards, player_cards,num_selected_card)
                 else: 
                     selected_bot_card = card + ' ' + suit_trump_card
                     print('\nThe bot`s card is...\n')
@@ -364,36 +372,34 @@ def play_bot(player_cards, bot_cards, suit_trump_card,cards, selected_cards):
                 suit_bot_cards.append(bot_card.suit)
                 number_bot_cards.append(bot_card.rank)
             count = 0
+            card_to_check = suit_selected_card.pop()
             while count == 0: #проверка на наличие одной масти
-                if suit_selected_card == 'diamond':
+                if card_to_check == 'diamonds':
                     for i in range(len(suit_bot_cards)):
                         suit_bot_card = suit_bot_cards[i]
                         if suit_bot_card == 'diamonds':
                             count += 1
-                            print('d')
                             break
-                elif suit_selected_card == 'heart': 
+                elif card_to_check == 'hearts': 
                     for i in range(len(suit_bot_cards)):
                         suit_bot_card = suit_bot_cards[i]
                         if suit_bot_card == 'hearts':
                             count += 1
-                            print('h')
                             break
-                elif suit_selected_card == 'spade': 
+                elif card_to_check == 'spades': 
                     for i in range(len(suit_bot_cards)):
                         suit_bot_card = suit_bot_cards[i]
                         if suit_bot_card == 'spades':
                             count += 1
-                            print('s')
                             break
-                elif suit_selected_card == 'club': 
+                elif card_to_check == 'clubs': 
                     for i in range(len(suit_bot_cards)):
                         suit_bot_card = suit_bot_cards[i]
                         if suit_bot_card == 'clubs':
                             count += 1
-                            print('c')
                             break
                 else:
+                    print('stop')
                     break
             if count == 0: #если масти не совпадают
                 index = []
@@ -402,7 +408,7 @@ def play_bot(player_cards, bot_cards, suit_trump_card,cards, selected_cards):
                     if suit_bot_card == suit_trump_card:
                         index.append(i)
                 if len(index) == 0: #есть ли козырь, чтобы отбить (если нет козыря...)
-                    bot_takes_cards(selected_cards,bot_cards, player_cards,number_selected_card)
+                    bot_takes_cards(card_to_check,bot_cards, player_cards,num_selected_card)
                 else:
                     bot_trump_numbers = [] #поиск минимального козыря
                     for i in range(len(index)):
@@ -425,69 +431,69 @@ def play_bot(player_cards, bot_cards, suit_trump_card,cards, selected_cards):
                 num_bot_card = []
                 for i in range(len(bot_cards)):
                     bot_card = bot_cards[i]
-                    if suit_selected_card == bot_card.suit:
+                    if card_to_check == bot_card.suit:
                         count += 1
                         bot_card_with_same_suit.append(bot_card)
                         num_bot_card.append(bot_card.rank)
                 num_bot_card.sort()
                 count_for_check = 0
                 while count_for_check != 1:
-                    if number_selected_card == '6':
+                    if num_selected_card == '6':
                         for index in range(len(num_bot_card)):
                             card = num_bot_card[index]
                             if card == '7' or card == '8' or card == '9' or card == '10' or card == 'J' or card == 'Q' or card == 'K' or card == 'A':
                                 count_for_check += 1
                                 break
-                    elif number_selected_card == '7':
+                    elif num_selected_card == '7':
                         for index in range(len(num_bot_card)):
                             card = num_bot_card[index]
                             if card == '8' or card == '9' or card == '10' or card == 'J' or card == 'Q' or card == 'K' or card == 'A':
                                 count_for_check += 1
                                 break
-                    elif number_selected_card == '8':
+                    elif num_selected_card == '8':
                         for index in range(len(num_bot_card)):
                             card = num_bot_card[index]
                             if card == '9' or card == '10' or card == 'J' or card == 'Q' or card == 'K' or card == 'A':
                                 count_for_check += 1
                                 break
-                    elif number_selected_card == '9':
+                    elif num_selected_card == '9':
                         for index in range(len(num_bot_card)):
                             card = num_bot_card[index]
                             if card == 'A' or card == 'J' or card == 'Q' or card == 'K' or card == 'A':
                                 count_for_check += 1
                                 break
-                    elif number_selected_card == '10':
+                    elif num_selected_card == '10':
                         for index in range(len(num_bot_card)):
                             card = num_bot_card[index]
                             if card == 'J' or card == 'Q' or card == 'K' or card == 'A':
                                 count_for_check += 1
                                 break
-                    elif number_selected_card == 'J':
+                    elif num_selected_card == 'J':
                         for index in range(len(num_bot_card)):
                             card = num_bot_card[index]
                             if card == 'Q' or card == 'K' or card == 'A':
                                 count_for_check += 1
                                 break
-                    elif number_selected_card == 'Q':
+                    elif num_selected_card == 'Q':
                         for index in range(len(num_bot_card)):
                             card = num_bot_card[index]
                             if card == 'K' or card == 'A':
                                 count_for_check += 1
                                 break
-                    elif number_selected_card == 'K':
+                    elif num_selected_card == 'K':
                         for index in range(len(num_bot_card)):
                             card = num_bot_card[index]
                             if card == 'A':
                                 count_for_check += 1
                                 break
-                    elif number_selected_card == 'A':
-                        bot_takes_cards(selected_cards,bot_cards, player_cards,number_selected_card)
+                    elif num_selected_card == 'A':
+                        bot_takes_cards(card_to_check,bot_cards, player_cards,num_selected_card)
                     else:
-                        bot_takes_cards(selected_cards,bot_cards, player_cards,number_selected_card)
+                        bot_takes_cards(card_to_check,bot_cards, player_cards,num_selected_card)
                 if count_for_check == 0:
-                    bot_takes_cards(selected_cards,bot_cards, player_cards,number_selected_card)
+                    bot_takes_cards(card_to_check,bot_cards, player_cards,num_selected_card)
                 else: 
-                    selected_bot_card = card + ' ' + suit_selected_card + 's'
+                    selected_bot_card = card + ' ' + card_to_check
                     print('\nThe bot`s card is...\n')
                     time.sleep(1)
                     print(selected_bot_card)
@@ -499,7 +505,7 @@ def play_bot(player_cards, bot_cards, suit_trump_card,cards, selected_cards):
         answer = input('Do you want to put a card on the table?(enter "yes" or "no")\n').lower()
         while answer != 'yes' or answer != 'no':
                 if answer == 'yes':
-                    add_cards(player_cards,number_selected_card, bot_cards)
+                    add_cards(player_cards,num_selected_card, bot_cards)
                     break
                 elif answer == 'no':
                     print('\nOK\n')
