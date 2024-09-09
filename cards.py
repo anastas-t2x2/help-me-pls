@@ -12,8 +12,8 @@ class Card:
         return f'{self.rank} {self.suit}'
 
 class Player:
-    is_bot : bool
-    hand_cards : list
+    is_bot = True
+    hand_cards = []
     
 def main():
     print('Hello! Welcome. \nEnter "play" to start the game. \nIf you need help, enter "help".\n')
