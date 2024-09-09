@@ -26,6 +26,7 @@ def main():
         print('Enter only "play" or "help"!!! >:[')
 
 def play_card_game():
+    cards = prepare_cards()
     players = [
         Player(
         is_bot = True,
@@ -36,7 +37,6 @@ def play_card_game():
             hand_cards = get_cards_into_hand(cards = cards, hand_cards = [], cards_limit = 6),
         ),
     ]
-    cards = prepare_cards()
     #player_cards = get_cards_into_hand(cards = cards, hand_cards = [], cards_limit = 6)
     #bot_cards = get_cards_into_hand(cards = cards, hand_cards = [], cards_limit = 6)
     print('Now you have:\n')
