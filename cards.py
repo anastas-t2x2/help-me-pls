@@ -37,10 +37,10 @@ def play_card_game():
             hand_cards = get_cards_into_hand(cards = cards, hand_cards = [], cards_limit = 6),
         ),
     ]
-    #player_cards = get_cards_into_hand(cards = cards, hand_cards = [], cards_limit = 6)
-    #bot_cards = get_cards_into_hand(cards = cards, hand_cards = [], cards_limit = 6)
     print('Now you have:\n')
+    player_cards = players[1].hand_cards
     show_cards(player_cards)
+    bot_cards = players[0].hand_cards
     trump_card = define_trump_card(cards)
     show_cards(hand_cards=bot_cards)
     who_goes_first(trump_card,player_cards,bot_cards, cards)
