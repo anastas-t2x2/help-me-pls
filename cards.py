@@ -29,8 +29,8 @@ def play_card_game():
     cards = prepare_cards()
     players = [
         Player(
-        is_bot = True,
-        hand_cards = get_cards_into_hand(cards = cards, hand_cards = [], cards_limit = 6),
+            is_bot = True,
+            hand_cards = get_cards_into_hand(cards = cards, hand_cards = [], cards_limit = 6),
         ),
         Player(
             is_bot = False,
