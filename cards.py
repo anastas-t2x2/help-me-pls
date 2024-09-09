@@ -10,6 +10,10 @@ class Card:
         
     def __str__(self):
         return f'{self.rank} {self.suit}'
+
+class Player:
+    is_bot : bool
+    hand_cards : list
     
 def main():
     print('Hello! Welcome. \nEnter "play" to start the game. \nIf you need help, enter "help".\n')
@@ -22,17 +26,30 @@ def main():
         print('Enter only "play" or "help"!!! >:[')
 
 def play_card_game():
+    players = [
+        Player(
+        is_bot = True,
+        hand_cards = get_cards_into_hand(cards = cards, hand_cards = [], cards_limit = 6),
+        ),
+        Player(
+            is_bot = False,
+            hand_cards = get_cards_into_hand(cards = cards, hand_cards = [], cards_limit = 6),
+        ),
+    ]
     cards = prepare_cards()
-    player_cards = get_cards_into_hand(cards = cards, hand_cards = [], cards_limit = 6)
-    bot_cards = get_cards_into_hand(cards = cards, hand_cards = [], cards_limit = 6)
+    #player_cards = get_cards_into_hand(cards = cards, hand_cards = [], cards_limit = 6)
+    #bot_cards = get_cards_into_hand(cards = cards, hand_cards = [], cards_limit = 6)
     print('Now you have:\n')
     show_cards(player_cards)
     trump_card = define_trump_card(cards)
-    player_minimum_trump = get_minimum_trump_rank(player_cards, trump_card)
-    bot_minimum_trump = get_minimum_trump_rank(bot_cards, trump_card)
     show_cards(hand_cards=bot_cards)
     who_goes_first(trump_card,player_cards,bot_cards, cards)
+    rebuild_players_order(players, trump_card)
 
+def rebuild_players_order(players, trump_card):
+    first_player_index = 0
+    first_player_minimum_trump = None
+    
 def prepare_cards():
     suits = ['hearts', 'diamonds', 'clubs', 'spades']
     cards = [Card(rank,suit) for suit in suits for rank in RANKS]
