@@ -45,16 +45,21 @@ def play_card_game():
     trump_card = define_trump_card(cards)
     show_cards(hand_cards=bot_cards)
     #who_goes_first(trump_card,player_cards,bot_cards, cards)
-    players = rebuild_players_order(players=players, trump_card = trump_card)
+    players = reorder_players_by_min_trump(players=players, trump_card = trump_card)
+    players = players[first_player_index:] + players[:first_player_index]
+    for player in players:
+        if player.is_bot:
+            play_bot_first()
+        else:
+            play_player_first
 
-def rebuild_players_order(players, trump_card):
+def reorder_players_by_min_trump(players, trump_card):
     first_player_index = 0
-    first_player_minimum_trump = None
-    for i in range(12):
-        suit = players[i].hand_cards
-        print(suit)
-        #if suit.suit == trump_card.suit:
-            #print(suit.suit)
+    first_player_minimum_trump_index = None
+    for i, player in enumerate(players):
+        minimum_trump_rank = get_minimum_trump_rank(hand_cards=player.hand_cards, trump_card = trump_card)
+        minimum_trump_rank_index = RANKS.index(minimum_trump_rank)
+        if first_player_minimum_trump_index is None or minimum
     
 def prepare_cards():
     suits = ['hearts', 'diamonds', 'clubs', 'spades']
