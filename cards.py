@@ -12,8 +12,9 @@ class Card:
         return f'{self.rank} {self.suit}'
 
 class Player:
-    is_bot = True
-    hand_cards = []
+    def __init__(self, is_bot = True, hand_cards = []):
+        self.is_bot = is_bot
+        self.hand_cards = hand_cards
     
 def main():
     print('Hello! Welcome. \nEnter "play" to start the game. \nIf you need help, enter "help".\n')
@@ -43,12 +44,17 @@ def play_card_game():
     bot_cards = players[0].hand_cards
     trump_card = define_trump_card(cards)
     show_cards(hand_cards=bot_cards)
-    who_goes_first(trump_card,player_cards,bot_cards, cards)
-    rebuild_players_order(players, trump_card)
+    #who_goes_first(trump_card,player_cards,bot_cards, cards)
+    players = rebuild_players_order(players=players, trump_card = trump_card)
 
 def rebuild_players_order(players, trump_card):
     first_player_index = 0
     first_player_minimum_trump = None
+    for i in range(12):
+        suit = players[i].hand_cards
+        print(suit)
+        #if suit.suit == trump_card.suit:
+            #print(suit.suit)
     
 def prepare_cards():
     suits = ['hearts', 'diamonds', 'clubs', 'spades']
